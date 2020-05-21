@@ -150,8 +150,8 @@ const token=localStorage.getItem("token")
         <Col s={12} l={4} className="details">
           <p className="price">
             &#8377;{price}&ensp;&ensp;
-            {isfavourite===false?<FontAwesomeIcon icon={faHeart} style={{color:'black'}} onClick={setFavourite(true)} />:
-             <FontAwesomeIcon icon={faHeart} style={{color:'red'}} onClick={setFavourite(false)}/>}
+            {isfavourite===false?<FontAwesomeIcon icon={faHeart} style={{color:'black'}} onClick={(event)=>setFavourite(true)} />:
+             <FontAwesomeIcon icon={faHeart} style={{color:'red'}} onClick={(event)=>setFavourite(false)}/>}
             <FontAwesomeIcon icon={faShareAlt} className="logofb" />{" "}
           </p>
           <p className="addtitle">{proname}</p>
