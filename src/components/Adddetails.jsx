@@ -59,6 +59,7 @@ const token=localStorage.getItem("token")
       `${API}add/${props.match.params.id}`,{
         method:'GET',
         headers:{
+          'Content-Type':'application/json',
           Authorization:"Bearer "+token
         },
        
@@ -90,6 +91,7 @@ const token=localStorage.getItem("token")
     fetch(`${API}isfavourite/${props.match.params.id}`,{
       method:'POST',
       headers:{
+        'Content-Type':'application/json',
         Authorization:"Bearer "+token
       }
     }).then(res=>res.json()).then(res=>{
@@ -117,6 +119,7 @@ const token=localStorage.getItem("token")
       fetch(`${API}favourite/${props.match.params.id}`,{
         method:'POST',
         headers:{
+          'Content-Type':'application/json',
           Authorization:"Bearer "+token
         }
       }).then(res=>res.json).then(res=>{
@@ -127,6 +130,7 @@ const token=localStorage.getItem("token")
       fetch(`${API}delfavourite/${props.match.params.id}`,{
         method:'POST',
         headers:{
+          'Content-Type':'application/json',
           Authorization:"Bearer "+token
         }
       }).then(res=>res.json).then(res=>{
