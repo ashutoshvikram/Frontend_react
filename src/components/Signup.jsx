@@ -4,6 +4,7 @@ import Navgbar from "../Subcompo/Navgbar";
 import { Link, Redirect, withRouter,BrowserRouter as Router } from "react-router-dom";
 import { Row, Col, Container } from "react-materialize";
 import Message from "../helper/Message";
+import { API } from "../helper/Auth";
 class Signup extends Component {
   constructor(props) {
     super(props);
@@ -35,7 +36,7 @@ class Signup extends Component {
       mobno: this.state.mobno
     };
     console.log(data);
-    fetch("https://buysellit.herokuapp.com/api/signup", {
+    fetch( `${API}signup`, {
       method: "POST",
       body: JSON.stringify(data),
       headers: {

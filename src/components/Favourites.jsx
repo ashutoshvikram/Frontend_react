@@ -22,14 +22,15 @@ class Favourites extends Component {
         {
             method:'POST',
             headers:{
-                Authorization:"Bearer "+token
+                Authorization:"Bearer "+token,
+                'Content-Type':'application/json'
             }
         })
         .then(res =>(res.json()))
         .then(result =>{
             this.setState({
               loading:false,
-              items:result.items  
+              items:result.itemsof  
             });
 
         })

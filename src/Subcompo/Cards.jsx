@@ -54,7 +54,7 @@ function Cards(props) {
         <p>
         <Link  className="cardlink" to={"/add/"+newtitle[0]+"/"+props.id}>{props.title}</Link>
       &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;{props.delete==='true'?
-      <FontAwesomeIcon className="delicon" icon={faTrashAlt} size="lg" onClick={deleteAdd()}/>:null}
+      <FontAwesomeIcon className="delicon" icon={faTrashAlt} size="lg" onClick={event=>deleteAdd()}/>:null}
     
            </p>
         

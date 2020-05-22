@@ -81,8 +81,8 @@ const token=localStorage.getItem("token")
       location: res.item.location,
       postedon: ad,
 //memberdt: res.seller.registered_on,
-      img: res.item.imageUrl,
-   sellername: res.sellerdetails.name + res.sellerdetails.lastname,
+      img: res.item.imagesUrl,
+   sellername: res.sellerdetails.name +" "+ res.sellerdetails.lastname,
     profileimg: res.sellerdetails.profilepic,
       price: res.item.price,
     });
@@ -145,11 +145,11 @@ const token=localStorage.getItem("token")
       <Navgbar />
       <Row>
         <Col s={12} l={8}>
-          <Carousel_add proimages={"As"} />
+          <Carousel_add proimages={img} />
         </Col>
         <Col s={12} l={4} className="details">
           <p className="price">
-            &#8377;{price}&ensp;&ensp;
+            &#8377;{price}/-&ensp;&ensp;
             {isfavourite===false?<FontAwesomeIcon icon={faHeart} style={{color:'black'}} onClick={(event)=>setFavourite(true)} />:
              <FontAwesomeIcon icon={faHeart} style={{color:'red'}} onClick={(event)=>setFavourite(false)}/>}
             <FontAwesomeIcon icon={faShareAlt} className="logofb" />{" "}

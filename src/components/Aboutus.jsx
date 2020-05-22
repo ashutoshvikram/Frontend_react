@@ -4,6 +4,7 @@ import Navgbar from '../Subcompo/Navgbar'
 import Footer from "../Subcompo/Footer";
 import { useState } from "react";
 import { useEffect } from "react";
+import { API } from "../helper/Auth";
 function Aboutus() {
   const [values,setValues]=useState({email:'',subject:'',message:'',success:false})
   const {email,subject,message,success}=values
@@ -21,8 +22,11 @@ function Aboutus() {
      message:message
    }
    console.warn(JSON.stringify(data))
-   fetch('http://avikrams.pythonanywhere.com/api/contactus',{
+   fetch(`${API}contactus`,{
      method:'POST',
+     headers:{
+      'Content-Type':'application/json'
+     },
      body: JSON.stringify(data)
 
    }).then(res=>res.json())

@@ -41,7 +41,8 @@ function Myprofile() {
     const response = await fetch(`${API}profile`, {
       method:'GET',
       headers:{
-        Authorization:"Bearer "+token
+        Authorization:"Bearer "+token,
+        'Content-Type':'application/json'
       }
     });
     const res = await response.json();

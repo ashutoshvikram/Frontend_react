@@ -6,6 +6,7 @@ import { Row, Col } from "react-materialize";
 import { API } from "../helper/Auth";
 
 export default function AddForm(props) {
+  var urls=[];
   const [values, setValues] = useState({
     success: false,
     name: "",
@@ -31,6 +32,7 @@ const token =localStorage.getItem('token')
     const imags = event.target.files;
 
     const uploadImage = (image) => {
+     
       var form = new FormData();
       form.append("upload_preset", "buysell");
       form.append("cloud_name", "avikram");
@@ -41,10 +43,12 @@ const token =localStorage.getItem('token')
       xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
       xhr.send(form);
       xhr.onreadystatechange = function () {
-        if (xhr.status == 200) {
-          const response = xhr.responseText;
-          console.log(response.secure_url);
-          setValues({...values,images:images.concat(response.secure_url)})
+        if (xhr.readyState == 4 && xhr.status == 200) {
+        
+          var response = JSON.parse(xhr.responseText);
+          var url = response.secure_url; 
+          setValues({...values,images:images.push(url)})
+         
         }
       };
     };
@@ -66,14 +70,15 @@ const token =localStorage.getItem('token')
       location: location,
       category: props.cat,
       description: description,
-      imagesUrl: images,
+      imagesUrl:images,
     };
     fetch(`${API}createnew`, {
       method: "POST",
       headers:{
-        Authorization:"Bearer "+token
+        Authorization:"Bearer "+token,
+        'Content-Type':'application/json'
       },
-      body: values,
+      body: JSON.stringify(values)
     })
       .then((res) => res.json())
       .then((res) => {

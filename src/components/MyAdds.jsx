@@ -20,7 +20,8 @@ class MyAdds extends Component {
         fetch('https://buyapi.herokuapp.com/api/myadds',{
             method:'GET',
             headers:{
-                Authorization:"Bearer "+token
+                Authorization:"Bearer "+token,
+                'Content-Type':'application/json'
             }
         })
         .then(res =>(res.json()))

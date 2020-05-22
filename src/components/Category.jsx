@@ -22,7 +22,8 @@ class Category extends Component {
         fetch(`${API}category/${match.params.name}`,{
             method:'GET',
             headers:{
-                Authorization:"Bearer "+token
+                Authorization:"Bearer "+token,
+                'Content-Type':'application/json'
             }
         })
         .then(res =>(res.json()))

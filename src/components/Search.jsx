@@ -5,6 +5,7 @@ import Navgbar from '../Subcompo/Navgbar';
 import Cards from '../Subcompo/Cards';
 import Footer from '../Subcompo/Footer';
 import '../App.css';
+import { API } from '../helper/Auth';
 class Search extends Component {
     constructor(props) {
         super(props);
@@ -16,8 +17,14 @@ class Search extends Component {
     }
     componentDidMount() {
         const { match} = this.props;
-        
-        fetch(`https://buy-sellit.herokuapp.com/ap/search/${this.props.match.params.key}`)
+        const token=localStorage.getItem('token')
+        fetch(`${API}search/${this.props.match.params.key}`,{
+            method:'POST',
+            headers:{
+                Authorization:"Bearer "+token,
+                'Content-Type':'application/json'
+            }
+        })
         .then(res =>(res.json()))
         .then(result =>{
             this.setState({
@@ -25,7 +32,7 @@ class Search extends Component {
               items:result.items  
             });
 
-        })
+        }).catch(err=>console.log(err))
     }
     render() { 
         return (
@@ -41,12 +48,14 @@ class Search extends Component {
            <Row>
         
         {this.state.items.map(item =>(
-            <Cards title={item.Product_name}
-            date_post={item.posted_on}
-            id={item.id}
-            price={item.Price+"/-"}
-            location={item.Location}
-            image={item.Image}/>
+            <Cards title={item.name}
+            date_post={item.date}
+            id={item._id}
+            price={item.price+"/-"}
+            location={item.location}
+            image={item.imagesUrl[0]}
+            description={item.description}
+            />
         
 
         ))

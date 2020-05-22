@@ -20,7 +20,10 @@ class Home extends Component{
     }
     async componentDidMount(){
         await fetch(`${API}`,{
-            method:"GET"
+            method:"GET",
+            headers:{
+                'Content-Type':'application/json'
+            }
         })
         .then(res =>res.json())
         .then(
