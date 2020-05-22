@@ -1,7 +1,7 @@
 import React, { Component, useState, useEffect } from "react";
 import Carousel_add from "../Subcompo/Carousel_add";
 import Auth from "../helper/Auth";
-import {API} from '../helper/Auth'
+import { API } from "../helper/Auth";
 import { Redirect, Link } from "react-router-dom";
 import Footer from "../Subcompo/Footer";
 import { Row, Col, Button, Toast } from "react-materialize";
@@ -15,22 +15,17 @@ import {
   faMapMarker,
 } from "@fortawesome/free-solid-svg-icons";
 
-
-
-
 import Navgbar from "../Subcompo/Navgbar";
 
 const Adddetails = (props) => {
-
-const token=localStorage.getItem("token")
-
+  const token = localStorage.getItem("token");
 
   const [values, setValues] = useState({
     id: "",
     proname: "",
     desc: "",
     success: false,
-    isfavourite:false,
+    isfavourite: false,
     img: [],
     price: "",
     sellername: "",
@@ -54,24 +49,19 @@ const token=localStorage.getItem("token")
     profileimg,
   } = values;
   async function apifetch() {
-   
-    const response = await fetch(
-      `${API}add/${props.match.params.id}`,{
-        method:'GET',
-        headers:{
-          'Content-Type':'application/json',
-          Authorization:"Bearer "+token
-        },
-       
-      }
-      
-    );
+    const response = await fetch(`${API}add/${props.match.params.id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
     const res = await response.json();
     console.log(res);
-    const newdate=res.item.date.slice("T")
-    var ad=new Date(newdate)
-    ad=ad.toDateString()
-    ad=ad.slice(3)
+    const newdate = res.item.date.slice("T");
+    var ad = new Date(newdate);
+    ad = ad.toDateString();
+    ad = ad.slice(3);
     setValues({
       ...values,
       id: res.item._id,
@@ -80,31 +70,41 @@ const token=localStorage.getItem("token")
       desc: res.item.description,
       location: res.item.location,
       postedon: ad,
-//memberdt: res.seller.registered_on,
+      //memberdt: res.seller.registered_on,
       img: res.item.imagesUrl,
-   sellername: res.sellerdetails.name +" "+ res.sellerdetails.lastname,
-    profileimg: res.sellerdetails.profilepic,
+      sellername: res.sellerdetails.name + " " + res.sellerdetails.lastname,
+      profileimg: res.sellerdetails.profilepic,
       price: res.item.price,
     });
   }
-  const checkFav=()=>{
-    fetch(`${API}isfavourite/${props.match.params.id}`,{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        Authorization:"Bearer "+token
-      }
-    }).then(res=>res.json()).then(res=>{
-      setValues({...values,isfavourite:res.favourite})
+  const checkFav = () => {
+    fetch(`${API}isfavourite/${props.match.params.id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
     })
-  }
+      .then((res) => res.json())
+      .then((res) => {
+        setValues({ ...values, isfavourite: res.favourite });
+      });
+  };
   useEffect(() => {
     apifetch();
     checkFav();
   }, []);
 
   const contactseller = (event) => {
-    fetch(`${API}contactseller/${props.match.params.id}`);
+    fetch(`${API}contactseller/${props.match.params.id}`,{
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    }).then(res=>res.json()).then(res=>{
+      console.log(res)
+    });
   };
 
   const locate = location;
@@ -114,32 +114,36 @@ const token=localStorage.getItem("token")
   if (Auth() !== true) {
     return <Redirect to="/" />;
   }
-  const setFavourite=(check)=>{
-    if (check===true){
-      fetch(`${API}favourite/${props.match.params.id}`,{
-        method:'POST',
-        headers:{
-          'Content-Type':'application/json',
-          Authorization:"Bearer "+token
-        }
-      }).then(res=>res.json).then(res=>{
-        setValues({...values,isfavourite:true})
-      }).catch(err=>console.log(err))
+  const setFavourite = (check) => {
+    if (check === true) {
+      fetch(`${API}favourite/${props.match.params.id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      })
+        .then((res) => res.json)
+        .then((res) => {
+          setValues({ ...values, isfavourite: true });
+        })
+        .catch((err) => console.log(err));
+    } else {
+      fetch(`${API}delfavourite/${props.match.params.id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      })
+        .then((res) => res.json)
+        .then((res) => {
+          setValues({ ...values, isfavourite: false });
+        })
+        .catch((err) => console.log(err));
     }
-    else{
-      fetch(`${API}delfavourite/${props.match.params.id}`,{
-        method:'POST',
-        headers:{
-          'Content-Type':'application/json',
-          Authorization:"Bearer "+token
-        }
-      }).then(res=>res.json).then(res=>{
-        setValues({...values,isfavourite:false})
-      }).catch(err=>console.log(err))
-    }
-    
-  }
-  
+  };
+
   return (
     <div>
       <Navgbar />
@@ -150,11 +154,28 @@ const token=localStorage.getItem("token")
         <Col s={12} l={4} className="details">
           <p className="price">
             &#8377;{price}/-&ensp;&ensp;
-            {isfavourite===false?<FontAwesomeIcon icon={faHeart} style={{color:'black'}} onClick={(event)=>setFavourite(true)} />:
-             <FontAwesomeIcon icon={faHeart} style={{color:'red'}} onClick={(event)=>setFavourite(false)}/>}
-            <a style={{color:'black'}} href={"https://www.facebook.com/sharer/sharer.php?u="+"https://buysellit.netlify.app"}>
-              <FontAwesomeIcon icon={faShareAlt} className="logofb"
-             /></a>{" "}
+            {isfavourite === false ? (
+              <FontAwesomeIcon
+                icon={faHeart}
+                style={{ color: "black" }}
+                onClick={(event) => setFavourite(true)}
+              />
+            ) : (
+              <FontAwesomeIcon
+                icon={faHeart}
+                style={{ color: "red" }}
+                onClick={(event) => setFavourite(false)}
+              />
+            )}
+            <a
+              style={{ color: "black" }}
+              href={
+                "https://www.facebook.com/sharer/sharer.php?u=" +
+                "https://buysellit.netlify.app"
+              }
+            >
+              <FontAwesomeIcon icon={faShareAlt} className="logofb" />
+            </a>{" "}
           </p>
           <p className="addtitle">{proname}</p>
           <Row className="addloc">
@@ -170,12 +191,7 @@ const token=localStorage.getItem("token")
           </Row>
         </Col>
         <Col s={12} l={4} className="details">
-          <img
-            className="profilepic"
-            src={profileimg}
-            alt="seller"
-            srcset=""
-          />
+          <img className="profilepic" src={profileimg} alt="seller" srcset="" />
           <p className="namedetail">{sellername}</p>
 
           <Row className="addloc">
@@ -194,7 +210,6 @@ const token=localStorage.getItem("token")
                 <FontAwesomeIcon icon={faPhoneAlt} />
               </a>
             </Toast>
-
           </Row>
         </Col>
       </Row>
