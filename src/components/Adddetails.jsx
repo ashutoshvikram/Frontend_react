@@ -2,7 +2,7 @@ import React, { Component, useState, useEffect } from "react";
 import Carousel_add from "../Subcompo/Carousel_add";
 import Auth from "../helper/Auth";
 import {API} from '../helper/Auth'
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import Footer from "../Subcompo/Footer";
 import { Row, Col, Button, Toast } from "react-materialize";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -152,7 +152,9 @@ const token=localStorage.getItem("token")
             &#8377;{price}/-&ensp;&ensp;
             {isfavourite===false?<FontAwesomeIcon icon={faHeart} style={{color:'black'}} onClick={(event)=>setFavourite(true)} />:
              <FontAwesomeIcon icon={faHeart} style={{color:'red'}} onClick={(event)=>setFavourite(false)}/>}
-            <FontAwesomeIcon icon={faShareAlt} className="logofb" />{" "}
+            <a style={{color:'black'}} href={"https://www.facebook.com/sharer/sharer.php?u="+"https://buysellit.netlify.app"}>
+              <FontAwesomeIcon icon={faShareAlt} className="logofb"
+             /></a>{" "}
           </p>
           <p className="addtitle">{proname}</p>
           <Row className="addloc">

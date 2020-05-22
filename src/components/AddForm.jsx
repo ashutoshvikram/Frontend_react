@@ -6,7 +6,9 @@ import { Row, Col } from "react-materialize";
 import { API } from "../helper/Auth";
 
 export default function AddForm(props) {
-  var urls=[];
+  var nw=[]
+  const [link, setLink] = useState([]);
+  const [imags,setImags]=useState([])
   const [values, setValues] = useState({
     success: false,
     name: "",
@@ -29,33 +31,41 @@ const token =localStorage.getItem('token')
 
 
   const handleImage = (event, name) => {
-    const imags = event.target.files;
-
-    const uploadImage = (image) => {
-     
-      var form = new FormData();
-      form.append("upload_preset", "buysell");
-      form.append("cloud_name", "avikram");
-      form.append("file", image);
-      const url = "https://api.cloudinary.com/v1_1/avikram/image/upload";
-      var xhr = new XMLHttpRequest();
-      xhr.open("POST", url, true);
-      xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-      xhr.send(form);
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-        
-          var response = JSON.parse(xhr.responseText);
-          var url = response.secure_url; 
-          setValues({...values,images:images.push(url)})
-         
-        }
-      };
-    };
+    setImags(event.target.files)
+    
+  };
+  const multiupload=()=>{
     for (var i = 0; i < imags.length; i++) {
       uploadImage(imags[i]);
     }
-    
+  }
+  const uploadImage = (image) => {
+   
+    var form = new FormData();
+    form.append("upload_preset", "buysell");
+    form.append("cloud_name", "avikram");
+    form.append("file", image);
+    const url = "https://api.cloudinary.com/v1_1/avikram/image/upload";
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    xhr.send(form);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+      
+        var response = JSON.parse(xhr.responseText);
+        const urli = response.secure_url;
+        console.log("this is image url  "+urli) 
+       
+        nw=nw.concat(urli)
+        console.log(nw)
+        setLink(nw)
+        
+      
+        console.log(link)
+       
+      }
+    };
   };
 
   const handleChange = (event, name) => {
@@ -70,7 +80,7 @@ const token =localStorage.getItem('token')
       location: location,
       category: props.cat,
       description: description,
-      imagesUrl:images,
+      imagesUrl:link,
     };
     fetch(`${API}createnew`, {
       method: "POST",
@@ -82,9 +92,11 @@ const token =localStorage.getItem('token')
     })
       .then((res) => res.json())
       .then((res) => {
+      
         setValues({...values,success:true})
         alert("Your add posted")
-      }).catch(err=>console.error(err))
+      })
+      .catch(err=>console.error(err))
 
   };
 
@@ -144,7 +156,9 @@ const token =localStorage.getItem('token')
 
             
             </Row>
-
+            <button type="button" onClick={event=>multiupload()} className="postaddbutton">
+              upload
+            </button>
             <button type="submit" className="postaddbutton">
               POST ADD
             </button>
