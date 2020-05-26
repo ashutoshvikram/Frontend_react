@@ -24,8 +24,7 @@ const Adddetails = (props) => {
     id: "",
     proname: "",
     desc: "",
-    success: false,
-    isfavourite: false,
+    success:false,
     img: [],
     price: "",
     sellername: "",
@@ -37,7 +36,6 @@ const Adddetails = (props) => {
   const {
     id,
     proname,
-    isfavourite,
     desc,
     success,
     img,
@@ -48,6 +46,7 @@ const Adddetails = (props) => {
     memberdt,
     profileimg,
   } = values;
+  const [isfavourite,setFav]=useState(false)
   async function apifetch() {
     const response = await fetch(`${API}add/${props.match.params.id}`, {
       method: "GET",
@@ -76,8 +75,6 @@ const Adddetails = (props) => {
       profileimg: res.sellerdetails.profilepic,
       price: res.item.price,
     });
-  }
-  const checkFav =async () => {
     await fetch(`${API}isfavourite/${props.match.params.id}`, {
       method: "POST",
       headers: {
@@ -87,12 +84,25 @@ const Adddetails = (props) => {
     })
       .then((res) => res.json())
       .then((res) => {
-        setValues({ ...values, isfavourite: res.favourite });
+        setFav(res.favourite);
       });
-  };
+  }
+  // const checkFav =async () => {
+  //   await fetch(`${API}isfavourite/${props.match.params.id}`, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: "Bearer " + token,
+  //     },
+  //   })
+  //     .then((res) => res.json())
+  //     .then((res) => {
+  //       setValues({...values,isfavourite:res.favourite});
+  //     });
+  // };
   useEffect(() => {
     apifetch();
-    checkFav();
+   // checkFav();
   }, []);
 
   const contactseller = (event) => {
@@ -125,7 +135,7 @@ const Adddetails = (props) => {
       })
         .then((res) => res.json)
         .then((res) => {
-          setValues({ ...values, isfavourite: true });
+          setFav(true)
         })
         .catch((err) => console.log(err));
     } else {
@@ -138,7 +148,7 @@ const Adddetails = (props) => {
       })
         .then((res) => res.json)
         .then((res) => {
-          setValues({ ...values, isfavourite: false });
+          setFav(false)
         })
         .catch((err) => console.log(err));
     }
