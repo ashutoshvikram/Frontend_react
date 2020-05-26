@@ -77,8 +77,8 @@ const Adddetails = (props) => {
       price: res.item.price,
     });
   }
-  const checkFav = () => {
-    fetch(`${API}isfavourite/${props.match.params.id}`, {
+  const checkFav =async () => {
+    await fetch(`${API}isfavourite/${props.match.params.id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
